@@ -16,7 +16,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = ViewController()
+        
+        let networkManager = NewsAPIManger()
+        
+        let tabBarController = UITabBarController()
+        tabBarController.tabBar.backgroundColor = .white
+        tabBarController.tabBar.isTranslucent = false
+        
+        let headlinesSceneNavigationController = UINavigationController(rootViewController: HeadlinesSceneViewController(navigator: HeadlinesSceneNavigator(), networkManager: networkManager))
+        headlinesSceneNavigationController.tabBarItem = .init(title: "Headlines", image: nil, tag: 0)
+        
+        let sourceSceneViewController = UINavigationController(rootViewController: SourceSceneViewController()) 
+        sourceSceneViewController.tabBarItem = .init(title: "Sources", image: nil, tag: 1)
+        
+        let savedSceneViewController = UINavigationController(rootViewController: SavedSceneViewController()) 
+        savedSceneViewController.tabBarItem = .init(title: "Saved", image: nil, tag: 2)
+        
+        tabBarController.viewControllers = [
+            headlinesSceneNavigationController,
+            sourceSceneViewController,
+            savedSceneViewController
+        ]
+        
+        window.rootViewController = tabBarController
+        
         self.window = window
         window.makeKeyAndVisible()
     }
