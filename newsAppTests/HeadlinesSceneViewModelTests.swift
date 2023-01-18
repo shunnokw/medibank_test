@@ -27,22 +27,50 @@ final class HeadlinesSceneViewModelTests: XCTestCase {
 
     func testDataSource() throws {
         mockNetworkManager.stubArticlesObservable = scheduler.createColdObservable([
-            .next(0, [
-                
-            ])
+            .next(0, [MockStuff.MockArticle])
         ])
         .asObservable()
         
         let viewModel = ViewModel.init(navigator: .init(), networkManager: mockNetworkManager)
         let output = viewModel.transform(input: .init())
         
-        let dataSourceObserver: TestableObserver = scheduler.createObserver([Section].self)
-        output.dateSourceDriver.asObservable().bind(to: dataSourceObserver).disposed(by: disposeBag)
+        let dataSourceObserver: TestableObserver<[Section]> = scheduler.createObserver([Section].self)
+        output.dateSourceDriver.drive(dataSourceObserver).disposed(by: disposeBag)
         
         scheduler.start()
         
-//        XCTAssertEqual(dataSourceObserver.events, [
-//            .next(0, [])
-//        ])
+        let cellViewModel = try extractCellViewModel(
+            dataSourceObserver: dataSourceObserver,
+            testTime: 0,
+            indexPath: 0
+        )
+        
+        scheduler.stop()
+        
+        let cellViewModelOutput = cellViewModel.transform(input: .init())
+        let titleTextObserver: TestableObserver<String> = scheduler.createObserver(String.self)
+        cellViewModelOutput.titleTextDriver.drive(titleTextObserver).disposed(by: disposeBag)
+        
+        scheduler = TestScheduler(initialClock: 0)
+        scheduler.start()
+        
+        XCTAssertEqual(titleTextObserver.events, [
+            .next(0, "test"),
+            .completed(0)
+        ])
     }
 }
+
+extension HeadlinesSceneViewModelTests {
+    func extractCellViewModel(
+        dataSourceObserver: TestableObserver<[Section]>,
+        testTime: Int,
+        indexPath: Int
+    ) throws -> ArticleCellViewModel {
+        guard let cellViewModel = dataSourceObserver.events[testTime].value.element?[indexPath].items[indexPath]
+        else { throw "error" }
+        return cellViewModel
+    }
+}
+
+extension String: Error {}

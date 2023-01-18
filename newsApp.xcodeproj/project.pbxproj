@@ -30,6 +30,7 @@
 		57C5555829784DBD00EEEEF3 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5555729784DBD00EEEEF3 /* Article.swift */; };
 		57C5555A29784DCE00EEEEF3 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5555929784DCE00EEEEF3 /* Source.swift */; };
 		57C5555C2978537600EEEEF3 /* MockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5555B2978537600EEEEF3 /* MockNetworkManager.swift */; };
+		57C5555E29785CF300EEEEF3 /* MockStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5555D29785CF300EEEEF3 /* MockStuff.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		57C5555729784DBD00EEEEF3 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		57C5555929784DCE00EEEEF3 /* Source.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
 		57C5555B2978537600EEEEF3 /* MockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManager.swift; sourceTree = "<group>"; };
+		57C5555D29785CF300EEEEF3 /* MockStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStuff.swift; sourceTree = "<group>"; };
 		8680ADA7874DEBF20C3300F7 /* Pods_newsAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_newsAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E2110B63B45D98C60D7A7C /* Pods_newsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_newsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E15500AA1AFB07D41276DE /* Pods-newsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-newsAppTests/Pods-newsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				57C554DD2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift */,
 				57C5555B2978537600EEEEF3 /* MockNetworkManager.swift */,
+				57C5555D29785CF300EEEEF3 /* MockStuff.swift */,
 			);
 			path = newsAppTests;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C5555C2978537600EEEEF3 /* MockNetworkManager.swift in Sources */,
+				57C5555E29785CF300EEEEF3 /* MockStuff.swift in Sources */,
 				57C554DE2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
