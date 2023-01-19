@@ -11,16 +11,16 @@ import RxCocoa
 import RxDataSources
 
 final class ArticleView: UIView {
-    let disposeBag = DisposeBag()
     let input: HeadlinesSceneViewModel.Input!
-    var collectionView: UICollectionView!
-    let spinner = UIActivityIndicatorView()
-    
-    // TODO: Pull to refresh
+
+    private let disposeBag = DisposeBag()
+    private var collectionView: UICollectionView!
+    private let spinner = UIActivityIndicatorView()
+    private let refreshControler = UIRefreshControl()
     
     override init(frame: CGRect) {
         self.input = HeadlinesSceneViewModel.Input(
-//            refreshIndicator: collectionView.rx.refreshControl
+            refreshControlSignal: refreshControler.rx.controlEvent(.valueChanged).asSignal()
         )
         super.init(frame: frame)
         setupView()
@@ -68,6 +68,10 @@ final class ArticleView: UIView {
                 self.spinner.stopAnimating()
             }
         }).disposed(by: disposeBag)
+        output.otherSignal.emit().disposed(by: disposeBag)
+        output.refreshSignal.emit(onNext: ({
+            self.refreshControler.endRefreshing()
+        })).disposed(by: disposeBag)
     }
 }
 
@@ -78,7 +82,7 @@ extension ArticleView {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
         collectionViewFlowLayout.itemSize = CGSize(width: UIScreen.main.bounds.size.width * 0.95, height: 300)
         let collectionView: UICollectionView = .init(frame: CGRectZero, collectionViewLayout: collectionViewFlowLayout)
-        
+        collectionView.refreshControl = refreshControler
         return collectionView
     }
     

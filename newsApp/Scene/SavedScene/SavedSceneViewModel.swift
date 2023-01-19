@@ -34,7 +34,9 @@ class SavedSceneViewModel: ViewModelType {
         
         return Output(
             isLoadingDriver: .empty(), 
-            dateSourceDriver: dataSourceDriver
+            dateSourceDriver: dataSourceDriver,
+            otherSignal: .empty(),
+            refreshSignal: .empty()
         )
     }
 }
