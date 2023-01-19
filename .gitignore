@@ -343,3 +343,4 @@ fastlane/sign&cert
 *.save
 ._*
 *.bak
+key.plist
