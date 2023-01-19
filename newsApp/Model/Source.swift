@@ -7,7 +7,19 @@
 
 import Foundation
 
-class Source: Codable {
+class Source: Codable, Equatable {
+    static func == (lhs: Source, rhs: Source) -> Bool {
+        return (
+            lhs.id == rhs.id &&
+            lhs.name == rhs.name &&
+            lhs.description == rhs.description &&
+            lhs.url == rhs.url &&
+            lhs.category == rhs.category &&
+            lhs.language == rhs.language &&
+            lhs.country == rhs.country
+        )
+    }
+    
     let id: String?
     let name: String?
     let description: String?

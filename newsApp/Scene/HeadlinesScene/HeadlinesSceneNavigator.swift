@@ -6,8 +6,17 @@
 //
 
 import Foundation
+import UIKit
 
 final class HeadlinesSceneNavigator {
     
-    init() {}
+    let navigator: UINavigationController
+    
+    init(navigator: UINavigationController) {
+        self.navigator = navigator
+    }
+    
+    func toWebViewScene(article: Article, userDefaultManager: UserDefaultManagerType) {
+        navigator.pushViewController(WebViewSceneViewController(webViewSceneViewModel: .init(article: article, userDefaultManager: userDefaultManager)), animated: true)
+    }
 }

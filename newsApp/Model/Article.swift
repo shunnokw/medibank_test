@@ -7,7 +7,20 @@
 
 import Foundation
 
-class Article: Codable {
+class Article: Codable, Equatable {
+    static func == (lhs: Article, rhs: Article) -> Bool {
+        return (
+            lhs.source == rhs.source &&
+            lhs.author == rhs.author &&
+            lhs.title == rhs.title &&
+            lhs.description == rhs.description &&
+            lhs.url == rhs.url &&
+            lhs.urlToImage == rhs.urlToImage &&
+            lhs.publishedAt == rhs.publishedAt &&
+            lhs.content == rhs.content
+        )
+    }
+    
     let source: Source
     let author: String?
     let title: String?

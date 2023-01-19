@@ -9,12 +9,10 @@ import UIKit
 
 class HeadlinesSceneViewController: UIViewController {
     
-    let navigator: HeadlinesSceneNavigator
-    let networkManager: NewsApiManagerType
+    let headlinesSceneViewModel: HeadlinesSceneViewModel
 
-    init(navigator: HeadlinesSceneNavigator, networkManager: NewsApiManagerType) {
-        self.navigator = navigator
-        self.networkManager = networkManager
+    init(headlinesSceneViewModel: HeadlinesSceneViewModel) {
+        self.headlinesSceneViewModel = headlinesSceneViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -22,6 +20,7 @@ class HeadlinesSceneViewController: UIViewController {
         fatalError("init(coder:) is not supported")
     }
     
+    // TODO: Should not have so many setting code in viewController
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Headlines"
@@ -32,9 +31,8 @@ class HeadlinesSceneViewController: UIViewController {
         self.navigationController?.navigationBar.standardAppearance = appearance
         
         let headlinesSceneView = HeadlinesSceneView()
-        let headlinesSceneViewModel = HeadlinesSceneViewModel(navigator: .init(), networkManager: networkManager)
         let output = headlinesSceneViewModel.transform(input: headlinesSceneView.input)
-        headlinesSceneView.transform(output: output)
+        headlinesSceneView.configure(output: output)
         self.view = headlinesSceneView
     }
 }

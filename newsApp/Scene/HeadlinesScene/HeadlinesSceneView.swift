@@ -16,6 +16,7 @@ final class HeadlinesSceneView: UIView {
     var collectionView: UICollectionView!
     
     // TODO: Loading Indicator
+    // TODO: Pull to refresh
     
     override init(frame: CGRect) {
         self.input = HeadlinesSceneViewModel.Input()
@@ -35,17 +36,17 @@ final class HeadlinesSceneView: UIView {
     func setupConstraints() {
         // TODO: move magic number to constant file
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
-        collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func transform(output: HeadlinesSceneViewModel.Output) {
+    func configure(output: HeadlinesSceneViewModel.Output) {
         let dataSource = makeDataSource()
         output.dateSourceDriver.drive(collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
@@ -55,13 +56,9 @@ extension HeadlinesSceneView {
     typealias DataSource = RxCollectionViewSectionedReloadDataSource<HeadlineListSectionModel>
     
     func makeCollectionView() -> UICollectionView {
-        let uiCollectionViewFlowLayout = UICollectionViewFlowLayout()
-        uiCollectionViewFlowLayout.itemSize = CGSize(width: UIScreen.main.bounds.size.width, height: 60)
-        
-        let collectionView: UICollectionView = .init(
-            frame: CGRectZero,
-            collectionViewLayout: uiCollectionViewFlowLayout
-        )
+        let collectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionViewFlowLayout.itemSize = CGSize(width: UIScreen.main.bounds.size.width * 0.95, height: 300)
+        let collectionView: UICollectionView = .init(frame: CGRectZero, collectionViewLayout: collectionViewFlowLayout)
         
         return collectionView
     }
@@ -73,9 +70,8 @@ extension HeadlinesSceneView {
         return .init(
             configureCell: { dataSource, collectionView, indexPath, item in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "articleCell", for: indexPath) as! ArticleCell
-                
-                let viewModelOutput = item.transform(input: .init())
-                cell.transform(output: viewModelOutput)
+                let viewModelOutput = item.transform(input: cell.input)
+                cell.configure(output: viewModelOutput)
                 return cell
             }
         )
@@ -83,11 +79,16 @@ extension HeadlinesSceneView {
 }
 
 struct HeadlineListSectionModel {
+    var header: String
     var items: [Item]
 }
 
 extension HeadlineListSectionModel: SectionModelType {
     typealias Item = ArticleCellViewModel
+    
+    var identity: String {
+        return header
+    }
     
     init(original: HeadlineListSectionModel, items: [Item]) {
         self = original

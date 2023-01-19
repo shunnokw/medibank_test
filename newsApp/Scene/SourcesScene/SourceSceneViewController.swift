@@ -10,7 +10,12 @@ import UIKit
 class SourceSceneViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .systemRed
+        self.view.backgroundColor = .white
         self.title = "Sources"
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .systemBlue
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        self.navigationController?.navigationBar.standardAppearance = appearance
     }
 }

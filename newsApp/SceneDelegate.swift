@@ -18,19 +18,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let networkManager = NewsAPIManger()
+        let userDefaultManager = UserDefaultManager()
         
         let tabBarController = UITabBarController()
         tabBarController.tabBar.backgroundColor = .white
         tabBarController.tabBar.isTranslucent = false
         
-        let headlinesSceneNavigationController = UINavigationController(rootViewController: HeadlinesSceneViewController(navigator: HeadlinesSceneNavigator(), networkManager: networkManager))
-        headlinesSceneNavigationController.tabBarItem = .init(title: "Headlines", image: nil, tag: 0)
+        
+        let headlinesSceneNavigationController = UINavigationController()
+        let headlinesSceneViewController = HeadlinesSceneViewController(headlinesSceneViewModel: .init(navigator: HeadlinesSceneNavigator(navigator: headlinesSceneNavigationController), networkManager: networkManager, userDefaultManager: userDefaultManager))
+        headlinesSceneNavigationController.pushViewController(headlinesSceneViewController, animated: false)
+        headlinesSceneNavigationController.tabBarItem = .init(title: "Headlines", image: UIImage(systemName: "doc.plaintext"), tag: 0)
         
         let sourceSceneViewController = UINavigationController(rootViewController: SourceSceneViewController()) 
-        sourceSceneViewController.tabBarItem = .init(title: "Sources", image: nil, tag: 1)
+        sourceSceneViewController.tabBarItem = .init(title: "Sources", image: UIImage(systemName: "book"), tag: 1)
         
         let savedSceneViewController = UINavigationController(rootViewController: SavedSceneViewController()) 
-        savedSceneViewController.tabBarItem = .init(title: "Saved", image: nil, tag: 2)
+        savedSceneViewController.tabBarItem = .init(title: "Saved", image: UIImage(systemName: "bookmark"), tag: 2)
         
         tabBarController.viewControllers = [
             headlinesSceneNavigationController,

@@ -67,7 +67,7 @@ extension HeadlinesSceneViewModelTests {
         testTime: Int,
         indexPath: Int
     ) throws -> ArticleCellViewModel {
-        guard let cellViewModel = dataSourceObserver.events[testTime].value.element?[indexPath].items[indexPath]
+        guard let cellViewModel = dataSourceObserver.events[testTime].value.element?[0].items[indexPath]
         else { throw "error" }
         return cellViewModel
     }

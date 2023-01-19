@@ -10,10 +10,10 @@ import RxSwift
 
 protocol NewsApiManagerType {
     func getHeadlines() -> Observable<[Article]>
+    func getSources() -> Observable<[Source]>
 }
 
 class NewsAPIManger: NewsApiManagerType {
-    
     private let apiKey: String
     private let baseUrl = "https://newsapi.org/v2/"
     
@@ -26,66 +26,36 @@ class NewsAPIManger: NewsApiManagerType {
     }
     
     func getHeadlines() -> Observable<[Article]> {
-        return Observable.create {
-            (observer) -> Disposable in
-            
-            var urlComponents = URLComponents(string: self.baseUrl + "top-headlines")!
-            urlComponents.queryItems = [
-                URLQueryItem(name: "country", value: "au"),
-                URLQueryItem(name: "apiKey", value: self.apiKey)
-            ]
-            
-            var request = URLRequest(url: urlComponents.url!)
-            request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let session = URLSession.shared
-            var articles: [Article] = []
-            let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
-                do {
-                    let newsResponse = try JSONDecoder().decode(NewsResponse.self, from: data!) as NewsResponse
-                    articles = newsResponse.articles
-                    observer.onNext(articles)
-                } catch {
-                    print(error)
-                }
-            })
-            
-            task.resume()
-            
-            return Disposables.create()
-        }
+        var urlComponents = URLComponents(string: self.baseUrl + "top-headlines")!
+        urlComponents.queryItems = [
+            URLQueryItem(name: "language", value: "en"),
+            URLQueryItem(name: "apiKey", value: self.apiKey)
+        ]
+        
+        var request = URLRequest(url: urlComponents.url!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        return URLSession.shared.rx
+            .data(request: request)
+            .map { data in try JSONDecoder().decode(NewsResponse.self, from: data).articles! }
+            .catchAndReturn([])
     }
     
-//    func getSources() -> [Source] {
-//        return Observable.create {
-//            (observer) -> Disposable in
-//
-//            var urlComponents = URLComponents(string: self.baseUrl + "top-headlines")!
-//            urlComponents.queryItems = [
-//                URLQueryItem(name: "country", value: "au"),
-//                URLQueryItem(name: "apiKey", value: self.apiKey)
-//            ]
-//
-//            var request = URLRequest(url: urlComponents.url!)
-//            request.httpMethod = "GET"
-//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//            let session = URLSession.shared
-//            var articles: [Article] = []
-//            let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
-//                do {
-//                    let newsResponse = try JSONDecoder().decode(NewsResponse.self, from: data!) as NewsResponse
-//                    articles = newsResponse.articles
-//                    observer.onNext(articles)
-//                } catch {
-//                    print(error)
-//                }
-//            })
-//
-//            task.resume()
-//
-//            return Disposables.create()
-//        }
-//    }
+    func getSources() -> Observable<[Source]> {
+        var urlComponents = URLComponents(string: self.baseUrl + "top-headlines/sources")!
+        urlComponents.queryItems = [
+            URLQueryItem(name: "language", value: "en"),
+            URLQueryItem(name: "apiKey", value: self.apiKey)
+        ]
+
+        var request = URLRequest(url: urlComponents.url!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        return URLSession.shared.rx
+            .data(request: request)
+            .map { data in try JSONDecoder().decode(NewsResponse.self, from: data).sources! }
+            .catchAndReturn([])
+    }
 }
