@@ -20,7 +20,7 @@
 		57C554D32977C32E00EEEEF3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C554D12977C32E00EEEEF3 /* LaunchScreen.storyboard */; };
 		57C554DE2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C554DD2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift */; };
 		57C555362977C80000EEEEF3 /* HeadlinesSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C555352977C80000EEEEF3 /* HeadlinesSceneViewController.swift */; };
-		57C555382977C81800EEEEF3 /* HeadlinesSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C555372977C81800EEEEF3 /* HeadlinesSceneView.swift */; };
+		57C555382977C81800EEEEF3 /* ArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C555372977C81800EEEEF3 /* ArticleView.swift */; };
 		57C5553A2977C82300EEEEF3 /* HeadlinesSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C555392977C82300EEEEF3 /* HeadlinesSceneViewModel.swift */; };
 		57C5553C2977C83400EEEEF3 /* HeadlinesSceneNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5553B2977C83400EEEEF3 /* HeadlinesSceneNavigator.swift */; };
 		57C555402977CA4700EEEEF3 /* SourceSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C5553F2977CA4600EEEEF3 /* SourceSceneViewController.swift */; };
@@ -68,7 +68,7 @@
 		57C554D92977C32E00EEEEF3 /* newsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = newsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C554DD2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlinesSceneViewModelTests.swift; sourceTree = "<group>"; };
 		57C555352977C80000EEEEF3 /* HeadlinesSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlinesSceneViewController.swift; sourceTree = "<group>"; };
-		57C555372977C81800EEEEF3 /* HeadlinesSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlinesSceneView.swift; sourceTree = "<group>"; };
+		57C555372977C81800EEEEF3 /* ArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleView.swift; sourceTree = "<group>"; };
 		57C555392977C82300EEEEF3 /* HeadlinesSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlinesSceneViewModel.swift; sourceTree = "<group>"; };
 		57C5553B2977C83400EEEEF3 /* HeadlinesSceneNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlinesSceneNavigator.swift; sourceTree = "<group>"; };
 		57C5553F2977CA4600EEEEF3 /* SourceSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceSceneViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +133,34 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		5744FA22297985ED006918A9 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				57C555372977C81800EEEEF3 /* ArticleView.swift */,
+				57C5555F29790D0300EEEEF3 /* WebViewScene */,
+				5744FA2329798602006918A9 /* Cell */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		5744FA2329798602006918A9 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				57C5555129781C2500EEEEF3 /* ArticleCell.swift */,
+				57C5555329781C3000EEEEF3 /* ArticleCellViewModel.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		5744FA24297986BE006918A9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				57C555432977CB7F00EEEEF3 /* NewsAPIManager.swift */,
+				57C555482977CBC000EEEEF3 /* UserDefaultManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		57C554BA2977C32C00EEEEF3 = {
 			isa = PBXGroup;
 			children = (
@@ -156,9 +184,9 @@
 		57C554C52977C32D00EEEEF3 /* newsApp */ = {
 			isa = PBXGroup;
 			children = (
+				5744FA24297986BE006918A9 /* Services */,
 				57C5554C2977DB8100EEEEF3 /* Model */,
 				57C555472977CBA500EEEEF3 /* Utils */,
-				57C555332977C6BE00EEEEF3 /* Network */,
 				57C555322977C6AB00EEEEF3 /* Scene */,
 				57C554C62977C32D00EEEEF3 /* AppDelegate.swift */,
 				57C554C82977C32D00EEEEF3 /* SceneDelegate.swift */,
@@ -183,7 +211,7 @@
 		57C555322977C6AB00EEEEF3 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				57C5555F29790D0300EEEEF3 /* WebViewScene */,
+				5744FA22297985ED006918A9 /* Shared */,
 				57C5553E2977CA2400EEEEF3 /* SavedScene */,
 				57C5553D2977CA0900EEEEF3 /* SourcesScene */,
 				57C555342977C7E100EEEEF3 /* HeadlinesScene */,
@@ -191,20 +219,10 @@
 			path = Scene;
 			sourceTree = "<group>";
 		};
-		57C555332977C6BE00EEEEF3 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				57C555432977CB7F00EEEEF3 /* NewsAPIManager.swift */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
 		57C555342977C7E100EEEEF3 /* HeadlinesScene */ = {
 			isa = PBXGroup;
 			children = (
-				57C5555029781C1500EEEEF3 /* Cell */,
 				57C555352977C80000EEEEF3 /* HeadlinesSceneViewController.swift */,
-				57C555372977C81800EEEEF3 /* HeadlinesSceneView.swift */,
 				57C555392977C82300EEEEF3 /* HeadlinesSceneViewModel.swift */,
 				57C5553B2977C83400EEEEF3 /* HeadlinesSceneNavigator.swift */,
 			);
@@ -234,7 +252,6 @@
 		57C555472977CBA500EEEEF3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				57C555482977CBC000EEEEF3 /* UserDefaultManager.swift */,
 				5744FA1E29795B4F006918A9 /* ActivityIndicator.swift */,
 			);
 			path = Utils;
@@ -249,15 +266,6 @@
 				57C5555929784DCE00EEEEF3 /* Source.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		57C5555029781C1500EEEEF3 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				57C5555129781C2500EEEEF3 /* ArticleCell.swift */,
-				57C5555329781C3000EEEEF3 /* ArticleCellViewModel.swift */,
-			);
-			path = Cell;
 			sourceTree = "<group>";
 		};
 		57C5555F29790D0300EEEEF3 /* WebViewScene */ = {
@@ -474,7 +482,7 @@
 				57C55565297912AD00EEEEF3 /* WebViewSceneViewModel.swift in Sources */,
 				5744FA1B29795152006918A9 /* SourceSceneViewModel.swift in Sources */,
 				57C555402977CA4700EEEEF3 /* SourceSceneViewController.swift in Sources */,
-				57C555382977C81800EEEEF3 /* HeadlinesSceneView.swift in Sources */,
+				57C555382977C81800EEEEF3 /* ArticleView.swift in Sources */,
 				57C5553C2977C83400EEEEF3 /* HeadlinesSceneNavigator.swift in Sources */,
 				57C5556129790D1A00EEEEF3 /* WebViewSceneViewController.swift in Sources */,
 				57C554C92977C32D00EEEEF3 /* SceneDelegate.swift in Sources */,

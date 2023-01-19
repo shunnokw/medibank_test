@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-final class HeadlinesSceneView: UIView {
+final class ArticleView: UIView {
     let disposeBag = DisposeBag()
     let input: HeadlinesSceneViewModel.Input!
     var collectionView: UICollectionView!
@@ -71,7 +71,7 @@ final class HeadlinesSceneView: UIView {
     }
 }
 
-extension HeadlinesSceneView {
+extension ArticleView {
     typealias DataSource = RxCollectionViewSectionedReloadDataSource<HeadlineListSectionModel>
     
     func makeCollectionView() -> UICollectionView {

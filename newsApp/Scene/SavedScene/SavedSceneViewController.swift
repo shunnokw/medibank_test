@@ -29,7 +29,7 @@ class SavedSceneViewController: UIViewController {
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.navigationBar.standardAppearance = appearance
         
-        let headlinesSceneView = HeadlinesSceneView()
+        let headlinesSceneView = ArticleView()
         let output = savedSceneViewModel.transform(input: headlinesSceneView.input)
         headlinesSceneView.configure(output: output)
         self.view = headlinesSceneView

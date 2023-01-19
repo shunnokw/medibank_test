@@ -86,6 +86,7 @@ class ArticleCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        thumbnailImageView.image = nil
         disposeBag = DisposeBag()
     }
 }

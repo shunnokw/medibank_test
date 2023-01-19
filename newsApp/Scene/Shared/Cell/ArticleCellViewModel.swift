@@ -64,6 +64,7 @@ class ArticleCellViewModel: ViewModelType {
 }
 
 extension ArticleCellViewModel {
+    // TODO: Image caching
     func downloadImage(url: URL?) -> Observable<UIImage?> {
         guard let url = url else { return Observable.of(nil) }
         return URLSession.shared.rx

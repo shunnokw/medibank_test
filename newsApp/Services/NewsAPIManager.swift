@@ -28,7 +28,7 @@ class NewsAPIManger: NewsApiManagerType {
     func getHeadlines() -> Observable<[Article]> {
         var urlComponents = URLComponents(string: self.baseUrl + "top-headlines")!
         urlComponents.queryItems = [
-            URLQueryItem(name: "language", value: "en"),
+            URLQueryItem(name: "country", value: "au"),
             URLQueryItem(name: "apiKey", value: self.apiKey)
         ]
         
