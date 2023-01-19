@@ -1,5 +1,5 @@
 //
-//  UserDefaultManager.swift
+//  UserDefaultService.swift
 //  newsApp
 //
 //  Created by Jason Wong on 18/1/2023.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol UserDefaultManagerType {
+protocol UserDefaultServiceType {
     func addBookmark(article: Article)
     func removeBookmark(article: Article)
     func getBookmarks() -> [Article]
     func checkIsBookmarked(article: Article) -> Bool
 }
 
-class UserDefaultManager: UserDefaultManagerType {
+class UserDefaultService: UserDefaultServiceType {
     let userDefaults: UserDefaults
     
     init() {

@@ -16,7 +16,7 @@ final class HeadlinesSceneNavigator {
         self.navigator = navigator
     }
     
-    func toWebViewScene(article: Article, userDefaultManager: UserDefaultManagerType) {
-        navigator.pushViewController(WebViewSceneViewController(webViewSceneViewModel: .init(article: article, userDefaultManager: userDefaultManager)), animated: true)
+    func toWebViewScene(article: Article, userDefaultService: UserDefaultServiceType) {
+        navigator.pushViewController(WebViewSceneViewController(webViewSceneViewModel: .init(article: article, userDefaultService: userDefaultService)), animated: true)
     }
 }

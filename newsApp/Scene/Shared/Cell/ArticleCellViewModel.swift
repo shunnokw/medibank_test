@@ -23,12 +23,12 @@ class ArticleCellViewModel: ViewModelType {
     
     private let article: Article
     private let navigator: HeadlinesSceneNavigator
-    private let userDefaultManager: UserDefaultManagerType
+    private let userDefaultService: UserDefaultServiceType
     
-    init(article: Article, navigator: HeadlinesSceneNavigator, userDefaultManager: UserDefaultManagerType) {
+    init(article: Article, navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
         self.article = article
         self.navigator = navigator
-        self.userDefaultManager = userDefaultManager
+        self.userDefaultService = userDefaultService
     }
     
     func transform(input: Input) -> Output {
@@ -51,7 +51,7 @@ class ArticleCellViewModel: ViewModelType {
         }
         
         let otherSignal = input.clickOnCardSignal.do(onNext: {
-            self.navigator.toWebViewScene(article: self.article, userDefaultManager: self.userDefaultManager)
+            self.navigator.toWebViewScene(article: self.article, userDefaultService: self.userDefaultService)
         })
         
         return Output(

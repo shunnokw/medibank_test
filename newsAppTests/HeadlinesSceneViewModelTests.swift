@@ -8,6 +8,7 @@
 import XCTest
 import RxTest
 import RxSwift
+import RxCocoa
 
 @testable import newsApp
 
@@ -17,21 +18,27 @@ final class HeadlinesSceneViewModelTests: XCTestCase {
     
     private var scheduler: TestScheduler!
     private var disposeBag: DisposeBag!
-    private var mockNetworkManager: MockNewsAPIManger!
+    private var mockNewsApiService: MockNewsApiService!
+    private var mockUserDefaultService: MockUserDefaultService!
 
     override func setUpWithError() throws {
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
-        mockNetworkManager = MockNewsAPIManger()
+        mockNewsApiService = MockNewsApiService()
+        mockUserDefaultService = MockUserDefaultService()
     }
 
     func testDataSource() throws {
-        mockNetworkManager.stubArticlesObservable = scheduler.createColdObservable([
+        mockNewsApiService.stubHeadlineArticlesObservable = scheduler.createColdObservable([
             .next(0, [MockStuff.MockArticle])
         ])
         .asObservable()
         
-        let viewModel = ViewModel.init(navigator: .init(), networkManager: mockNetworkManager)
+        let viewModel = ViewModel.init(
+            navigator: .init(navigator: UINavigationController()),
+            newsApiService: mockNewsApiService,
+            userDefaultService: mockUserDefaultService
+        )
         let output = viewModel.transform(input: .init())
         
         let dataSourceObserver: TestableObserver<[Section]> = scheduler.createObserver([Section].self)
@@ -47,16 +54,19 @@ final class HeadlinesSceneViewModelTests: XCTestCase {
         
         scheduler.stop()
         
-        let cellViewModelOutput = cellViewModel.transform(input: .init())
-        let titleTextObserver: TestableObserver<String> = scheduler.createObserver(String.self)
+        let cellViewModelOutput = cellViewModel.transform(input: .init(clickOnCardSignal: .empty()))
+        let titleTextObserver: TestableObserver<NSAttributedString> = scheduler.createObserver(NSAttributedString.self)
         cellViewModelOutput.titleTextDriver.drive(titleTextObserver).disposed(by: disposeBag)
         
         scheduler = TestScheduler(initialClock: 0)
         scheduler.start()
         
+        let font = UIFont.systemFont(ofSize: 14)
+        let attributes = [NSAttributedString.Key.font: font]
+        let expectedText = NSAttributedString(string: "test", attributes: attributes)
+        
         XCTAssertEqual(titleTextObserver.events, [
-            .next(0, "test"),
-            .completed(0)
+            .next(0, expectedText)
         ])
     }
 }

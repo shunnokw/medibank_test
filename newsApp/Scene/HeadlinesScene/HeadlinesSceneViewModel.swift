@@ -22,23 +22,23 @@ final class HeadlinesSceneViewModel: ViewModelType {
     }
     
     private let navigator: HeadlinesSceneNavigator
-    private let networkManager: NewsApiManagerType
-    private let userDefaultManager: UserDefaultManagerType
+    private let newsApiService: NewsApiServiceType
+    private let userDefaultService: UserDefaultServiceType
     private let isLoading: ActivityIndicator
 
-    init(navigator: HeadlinesSceneNavigator, networkManager: NewsApiManagerType, userDefaultManager: UserDefaultManagerType) {
+    init(navigator: HeadlinesSceneNavigator, newsApiService: NewsApiServiceType, userDefaultService: UserDefaultServiceType) {
         self.navigator = navigator
-        self.networkManager = networkManager
-        self.userDefaultManager = userDefaultManager
+        self.newsApiService = newsApiService
+        self.userDefaultService = userDefaultService
         self.isLoading = ActivityIndicator()
     }
     
     func transform(input: Input) -> Output {
-        let articlesObservable = networkManager.getHeadlines().trackActivity(isLoading)
+        let articlesObservable = newsApiService.getHeadlines().trackActivity(isLoading)
         
         let dataSourceDriver: Driver<[Section]> = articlesObservable.map {
             articles in
-            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultManager: self.userDefaultManager) }
+            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService) }
             return [Section(header: "Articles", items: articleViewModels)]
         }
             .asDriver(onErrorDriveWith: .empty())

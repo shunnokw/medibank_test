@@ -17,8 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         
-        let networkManager = NewsAPIManger()
-        let userDefaultManager = UserDefaultManager()
+        let newAPIService = NewsAPIService()
+        let userDefaultService = UserDefaultService()
         
         let tabBarController = UITabBarController()
         tabBarController.tabBar.backgroundColor = .white
@@ -31,8 +31,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 navigator: HeadlinesSceneNavigator(
                     navigator: headlinesSceneNavigationController
                 ),
-                networkManager: networkManager,
-                userDefaultManager: userDefaultManager
+                newsApiService: newAPIService,
+                userDefaultService: userDefaultService
             )
         )
         headlinesSceneNavigationController.pushViewController(headlinesSceneViewController, animated: false)
@@ -47,7 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 navigator: HeadlinesSceneNavigator(
                     navigator: savedSceneNavigationController
                 ),
-                userDefaultManager: userDefaultManager
+                userDefaultService: userDefaultService
             )
         )
         savedSceneNavigationController.pushViewController(savedSceneViewController, animated: false)

@@ -23,13 +23,13 @@ class WebViewSceneViewModel: ViewModelType {
     let title: String?
     private let article: Article
     private let isBookmarkRelay: BehaviorRelay<Bool>
-    private let userDefaultManager: UserDefaultManagerType
+    private let userDefaultService: UserDefaultServiceType
     
-    init(article: Article, userDefaultManager: UserDefaultManagerType) {
+    init(article: Article, userDefaultService: UserDefaultServiceType) {
         self.article = article
         self.title = article.title
-        self.userDefaultManager = userDefaultManager
-        self.isBookmarkRelay = .init(value: userDefaultManager.checkIsBookmarked(article: article))
+        self.userDefaultService = userDefaultService
+        self.isBookmarkRelay = .init(value: userDefaultService.checkIsBookmarked(article: article))
     }
     
     func transform(input: Input) -> Output {
@@ -45,11 +45,11 @@ class WebViewSceneViewModel: ViewModelType {
         let otherSignal = input.bookmarkBtnTapEvent.map {
             _ in
             if self.isBookmarkRelay.value {
-                self.userDefaultManager.removeBookmark(article: self.article)
+                self.userDefaultService.removeBookmark(article: self.article)
             } else {
-                self.userDefaultManager.addBookmark(article: self.article)
+                self.userDefaultService.addBookmark(article: self.article)
             }
-            self.isBookmarkRelay.accept(self.userDefaultManager.checkIsBookmarked(article: self.article))
+            self.isBookmarkRelay.accept(self.userDefaultService.checkIsBookmarked(article: self.article))
         }
     
     return Output(

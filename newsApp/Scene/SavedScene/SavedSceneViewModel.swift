@@ -14,20 +14,20 @@ class SavedSceneViewModel: ViewModelType {
     typealias Input = HeadlinesSceneViewModel.Input
     typealias Output = HeadlinesSceneViewModel.Output
     
-    private let userDefaultManager: UserDefaultManagerType
+    private let userDefaultService: UserDefaultServiceType
     private let navigator: HeadlinesSceneNavigator
 
-    init(navigator: HeadlinesSceneNavigator, userDefaultManager: UserDefaultManagerType) {
+    init(navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
         self.navigator = navigator
-        self.userDefaultManager = userDefaultManager
+        self.userDefaultService = userDefaultService
     }
     
     func transform(input: Input) -> Output {
-        let articlesObservable = Observable.just(userDefaultManager.getBookmarks())
+        let articlesObservable = Observable.just(userDefaultService.getBookmarks())
         
         let dataSourceDriver: Driver<[Section]> = articlesObservable.map {
             articles in
-            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultManager: self.userDefaultManager) }
+            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService) }
             return [Section(header: "Articles", items: articleViewModels)]
         }
             .asDriver(onErrorDriveWith: .empty())

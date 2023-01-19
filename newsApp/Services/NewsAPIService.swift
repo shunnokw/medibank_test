@@ -1,5 +1,5 @@
 //
-//  NewsAPIManager.swift
+//  NewsAPIService.swift
 //  newsApp
 //
 //  Created by Jason Wong on 18/1/2023.
@@ -8,12 +8,12 @@
 import Foundation
 import RxSwift
 
-protocol NewsApiManagerType {
+protocol NewsApiServiceType {
     func getHeadlines() -> Observable<[Article]>
     func getSources() -> Observable<[Source]>
 }
 
-class NewsAPIManger: NewsApiManagerType {
+class NewsAPIService: NewsApiServiceType {
     private let apiKey: String
     private let baseUrl = "https://newsapi.org/v2/"
     
