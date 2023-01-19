@@ -14,19 +14,22 @@ final class HeadlinesSceneView: UIView {
     let disposeBag = DisposeBag()
     let input: HeadlinesSceneViewModel.Input!
     var collectionView: UICollectionView!
+    let spinner = UIActivityIndicatorView()
     
-    // TODO: Loading Indicator
     // TODO: Pull to refresh
     
     override init(frame: CGRect) {
-        self.input = HeadlinesSceneViewModel.Input()
+        self.input = HeadlinesSceneViewModel.Input(
+//            refreshIndicator: collectionView.rx.refreshControl
+        )
         super.init(frame: frame)
         setupView()
     }
     
     func setupView() {
         collectionView = self.makeCollectionView()
-        
+        spinner.isHidden = true
+        self.addSubview(spinner)
         self.addSubview(collectionView)
         
         self.backgroundColor = .white
@@ -40,6 +43,10 @@ final class HeadlinesSceneView: UIView {
         collectionView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
         collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +56,18 @@ final class HeadlinesSceneView: UIView {
     func configure(output: HeadlinesSceneViewModel.Output) {
         let dataSource = makeDataSource()
         output.dateSourceDriver.drive(collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        output.isLoadingDriver.drive(onNext: {
+            isLoading in
+            if isLoading {
+                self.collectionView.isHidden = true
+                self.spinner.isHidden = false
+                self.spinner.startAnimating()
+            } else {
+                self.collectionView.isHidden = false
+                self.spinner.isHidden = true
+                self.spinner.stopAnimating()
+            }
+        }).disposed(by: disposeBag)
     }
 }
 
