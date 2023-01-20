@@ -49,7 +49,7 @@ class UserDefaultService: UserDefaultServiceType {
         if let objects = userDefaults.value(forKey: "articles") as? Data {
             let decoder = JSONDecoder()
             if let articles = try? decoder.decode(Array.self, from: objects) as [Article] {
-                return articles
+                return articles.reversed()
             } else {
                 return []
             }

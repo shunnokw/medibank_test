@@ -39,17 +39,18 @@ final class HeadlinesSceneViewModelTests: XCTestCase {
             newsApiService: mockNewsApiService,
             userDefaultService: mockUserDefaultService
         )
-        let output = viewModel.transform(input: .init())
+        let output = viewModel.transform(input: .init(refreshControlSignal: .empty()))
         
         let dataSourceObserver: TestableObserver<[Section]> = scheduler.createObserver([Section].self)
         output.dateSourceDriver.drive(dataSourceObserver).disposed(by: disposeBag)
+        output.otherSignal.emit().disposed(by: disposeBag)
         
         scheduler.start()
         
         let cellViewModel = try extractCellViewModel(
             dataSourceObserver: dataSourceObserver,
-            testTime: 0,
-            indexPath: 0
+            event: 1,
+            row: 0
         )
         
         scheduler.stop()
@@ -74,13 +75,20 @@ final class HeadlinesSceneViewModelTests: XCTestCase {
 extension HeadlinesSceneViewModelTests {
     func extractCellViewModel(
         dataSourceObserver: TestableObserver<[Section]>,
-        testTime: Int,
-        indexPath: Int
+        event: Int,
+        row: Int
     ) throws -> ArticleCellViewModel {
-        guard let cellViewModel = dataSourceObserver.events[testTime].value.element?[0].items[indexPath]
-        else { throw "error" }
+        guard let cellViewModel = dataSourceObserver.events[safe: event]?.value.element?[safe: 0]?.items[safe: row]
+        else { throw "Failed to extract view model" }
         return cellViewModel
     }
 }
 
 extension String: Error {}
+
+extension Collection {
+  subscript(safe index: Index) -> Iterator.Element? {
+    guard indices.contains(index) else { return nil }
+    return self[index]
+  }
+}

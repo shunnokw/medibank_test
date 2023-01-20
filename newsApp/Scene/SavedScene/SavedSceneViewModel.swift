@@ -16,16 +16,28 @@ class SavedSceneViewModel: ViewModelType {
     
     private let userDefaultService: UserDefaultServiceType
     private let navigator: HeadlinesSceneNavigator
+    private let isLoading: ActivityIndicator
+    private let articlesRelay: BehaviorRelay<[Article]>
 
     init(navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
         self.navigator = navigator
         self.userDefaultService = userDefaultService
+        self.isLoading = ActivityIndicator()
+        self.articlesRelay = BehaviorRelay(value: [])
     }
     
     func transform(input: Input) -> Output {
-        let articlesObservable = Observable.just(userDefaultService.getBookmarks())
+        let articlesObservable = Observable.just(userDefaultService.getBookmarks()).map {
+            self.articlesRelay.accept($0)
+        }
         
-        let dataSourceDriver: Driver<[Section]> = articlesObservable.map {
+        let refreshSignal = input.refreshControlSignal
+            .map { [self] in
+                articlesRelay.accept(userDefaultService.getBookmarks())
+            }
+            .asSignal(onErrorSignalWith: .empty())
+        
+        let dataSourceDriver: Driver<[Section]> = articlesRelay.map {
             articles in
             let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService) }
             return [Section(header: "Articles", items: articleViewModels)]
@@ -35,8 +47,8 @@ class SavedSceneViewModel: ViewModelType {
         return Output(
             isLoadingDriver: .empty(), 
             dateSourceDriver: dataSourceDriver,
-            otherSignal: .empty(),
-            refreshSignal: .empty()
+            otherSignal: articlesObservable.asSignal(onErrorSignalWith: .empty()),
+            refreshSignal: refreshSignal
         )
     }
 }

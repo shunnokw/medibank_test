@@ -22,7 +22,7 @@ class ArticleCellViewModel: ViewModelType {
     }
     
     private let article: Article
-    private let navigator: HeadlinesSceneNavigator
+    private let navigator: HeadlinesSceneNavigatorType
     private let userDefaultService: UserDefaultServiceType
     
     init(article: Article, navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
@@ -51,7 +51,7 @@ class ArticleCellViewModel: ViewModelType {
         }
         
         let otherSignal = input.clickOnCardSignal.do(onNext: {
-            self.navigator.toWebViewScene(article: self.article, userDefaultService: self.userDefaultService)
+            self.navigator.eventOccurred(with: .toWebViewScene(self.article, self.userDefaultService))
         })
         
         return Output(
@@ -65,6 +65,7 @@ class ArticleCellViewModel: ViewModelType {
 
 extension ArticleCellViewModel {
     // TODO: Image caching
+    // Image loading effect for better UX?
     func downloadImage(url: URL?) -> Observable<UIImage?> {
         guard let url = url else { return Observable.of(nil) }
         return URLSession.shared.rx
