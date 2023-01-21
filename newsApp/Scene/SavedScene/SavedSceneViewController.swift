@@ -7,9 +7,9 @@
 
 import UIKit
 
-class SavedSceneViewController: UIViewController {
+final class SavedSceneViewController: UIViewController {
     
-    let savedSceneViewModel: SavedSceneViewModel
+    private let savedSceneViewModel: SavedSceneViewModel
     
     init(savedSceneViewModel: SavedSceneViewModel) {
         self.savedSceneViewModel = savedSceneViewModel
@@ -29,9 +29,9 @@ class SavedSceneViewController: UIViewController {
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.navigationBar.standardAppearance = appearance
         
-        let headlinesSceneView = ArticleView()
-        let output = savedSceneViewModel.transform(input: headlinesSceneView.input)
-        headlinesSceneView.configure(output: output)
-        self.view = headlinesSceneView
+        let articleView = ArticleView()
+        let output = savedSceneViewModel.transform(input: articleView.input)
+        articleView.configure(output: output)
+        self.view = articleView
     }
 }

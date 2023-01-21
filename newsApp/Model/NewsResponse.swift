@@ -9,7 +9,7 @@ import Foundation
 
 class NewsResponse: Codable {
     let status: String
-    let totalResults: Int
+    let totalResults: Int?
     // TODO: Change to generic type
     let articles: [Article]?
     let sources: [Source]?

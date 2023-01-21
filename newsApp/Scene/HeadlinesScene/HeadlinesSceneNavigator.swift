@@ -18,7 +18,7 @@ protocol HeadlinesSceneNavigatorType {
 
 final class HeadlinesSceneNavigator: HeadlinesSceneNavigatorType {
     
-    let navigator: UINavigationController
+    private let navigator: UINavigationController
     
     init(navigator: UINavigationController) {
         self.navigator = navigator

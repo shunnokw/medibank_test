@@ -7,9 +7,9 @@
 
 import UIKit
 
-class WebViewSceneViewController: UIViewController {
+final class WebViewSceneViewController: UIViewController {
     
-    let webViewSceneViewModel: WebViewSceneViewModel
+    private let webViewSceneViewModel: WebViewSceneViewModel
 
     init(webViewSceneViewModel: WebViewSceneViewModel) {
         self.webViewSceneViewModel = webViewSceneViewModel
@@ -36,6 +36,6 @@ class WebViewSceneViewController: UIViewController {
         webViewSceneView.configure(output: output)
         self.view = webViewSceneView
         
-        self.navigationItem.rightBarButtonItem = webViewSceneView.add
+        self.navigationItem.rightBarButtonItem = webViewSceneView.addBarButtonItem
     }
 }

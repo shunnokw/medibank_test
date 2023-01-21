@@ -9,7 +9,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class ArticleCellViewModel: ViewModelType {
+final class ArticleCellViewModel: ViewModelType {
     struct Input {
         let clickOnCardSignal: Signal<Void>
     }

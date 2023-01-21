@@ -8,9 +8,10 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import UIKit
 
 final class HeadlinesSceneViewModel: ViewModelType {
-    typealias Section = HeadlineListSectionModel
+    typealias Section = MultipleSectionModel
     
     struct Input {
         let refreshControlSignal: Signal<ControlEvent<()>.Element>
@@ -21,6 +22,7 @@ final class HeadlinesSceneViewModel: ViewModelType {
         let dateSourceDriver: Driver<[Section]>
         let otherSignal: Signal<Void>
         let refreshSignal: Signal<Void>
+        let layoutDriver: Driver<UICollectionViewLayout>
     }
     
     private let navigator: HeadlinesSceneNavigator
@@ -40,28 +42,38 @@ final class HeadlinesSceneViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let refreshSignal = input.refreshControlSignal
             .asObservable()
-            .flatMap { return self.newsApiService.getHeadlines() }
+            .flatMapLatest { [self] in return newsApiService.getHeadlines(sources: userDefaultService.getSelectedSources()) }
             .map { self.articlesRelay.accept($0) }
             .asSignal(onErrorSignalWith: .empty())
         
-        let articlesObservable = newsApiService.getHeadlines().trackActivity(isLoading).map {
+        let articlesObservable = newsApiService.getHeadlines(sources: self.userDefaultService.getSelectedSources()).trackActivity(isLoading).map {
             self.articlesRelay.accept($0)
         }
         
         let dataSourceDriver: Driver<[Section]> = articlesRelay.map {
             articles in
-            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService) }
-            return [Section(header: "Articles", items: articleViewModels)]
+            let articleViewModels: [SectionItem] = articles.map {
+                .ArticleListSectionItem(viewModel: ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService))
+            }
+            return [.ArticleListSectionModel(items: articleViewModels)]
         }
             .asDriver(onErrorDriveWith: .empty())
         
         let otherSignal = articlesObservable.asSignal(onErrorSignalWith: .empty())
         
+        let layoutDriver: Driver<UICollectionViewLayout> = Driver.just(
+            UICollectionViewFlowLayout()
+        ).map {
+            $0.itemSize = CGSize(width: UIScreen.main.bounds.size.width * 0.95, height: 300)
+            return $0
+        }
+        
         return Output(
             isLoadingDriver: isLoading.asDriver(),
             dateSourceDriver: dataSourceDriver,
             otherSignal: otherSignal,
-            refreshSignal: refreshSignal
+            refreshSignal: refreshSignal,
+            layoutDriver: layoutDriver
         )
     }
 }

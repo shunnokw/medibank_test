@@ -38,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         headlinesSceneNavigationController.pushViewController(headlinesSceneViewController, animated: false)
         headlinesSceneNavigationController.tabBarItem = .init(title: "Headlines", image: UIImage(systemName: "doc.plaintext"), tag: 0)
         
-        let sourceSceneViewController = UINavigationController(rootViewController: SourceSceneViewController()) 
+        let sourceSceneViewController = UINavigationController(rootViewController: SourceSceneViewController(sourceSceneViewModel: .init(newsApiService: newAPIService, userDefaultService: userDefaultService)))
         sourceSceneViewController.tabBarItem = .init(title: "Sources", image: UIImage(systemName: "book"), tag: 1)
         
         let savedSceneNavigationController = UINavigationController()

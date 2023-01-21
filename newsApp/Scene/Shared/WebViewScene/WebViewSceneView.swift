@@ -11,21 +11,21 @@ import RxSwift
 
 final class WebViewSceneView: UIView {
     let input: WebViewSceneViewModel.Input!
-    let webView = WKWebView()
-    let disposeBag = DisposeBag()
-    
-    let add = UIBarButtonItem()
+    let addBarButtonItem = UIBarButtonItem()
+
+    private let webView = WKWebView()
+    private let disposeBag = DisposeBag()    
 
     override init(frame: CGRect) {
         self.input = WebViewSceneViewModel.Input(
-            bookmarkBtnTapEvent: add.rx.tap.asSignal()
+            bookmarkBtnTapEvent: addBarButtonItem.rx.tap.asSignal()
         )
         super.init(frame: frame)
         
         self.backgroundColor = .white
         self.addSubview(webView)
         
-        add.style = .plain
+        addBarButtonItem.style = .plain
 
         setupConstraints()
     }
@@ -34,7 +34,7 @@ final class WebViewSceneView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
@@ -53,9 +53,9 @@ final class WebViewSceneView: UIView {
         output.isBookmarkedDriver.drive(onNext: {
             isBookmarked in
             if isBookmarked {
-                self.add.image = UIImage(systemName: "bookmark.fill")
+                self.addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
             } else {
-                self.add.image = UIImage(systemName: "bookmark")
+                self.addBarButtonItem.image = UIImage(systemName: "bookmark")
             }
         }).disposed(by: disposeBag)
         

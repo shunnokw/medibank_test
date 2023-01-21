@@ -9,7 +9,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class WebViewSceneViewModel: ViewModelType {
+final class WebViewSceneViewModel: ViewModelType {
     struct Input {
         let bookmarkBtnTapEvent: Signal<Void>
     }
@@ -51,11 +51,11 @@ class WebViewSceneViewModel: ViewModelType {
             }
             self.isBookmarkRelay.accept(self.userDefaultService.checkIsBookmarked(article: self.article))
         }
-    
-    return Output(
-        urlDriver: urlDriver,
-        isBookmarkedDriver: isBookmarkRelay.asDriver(),
-        otherSignal: otherSignal
-    )
-}
+        
+        return Output(
+            urlDriver: urlDriver,
+            isBookmarkedDriver: isBookmarkRelay.asDriver(),
+            otherSignal: otherSignal
+        )
+    }
 }

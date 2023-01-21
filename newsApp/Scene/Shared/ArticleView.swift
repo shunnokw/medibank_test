@@ -23,10 +23,7 @@ final class ArticleView: UIView {
             refreshControlSignal: refreshControler.rx.controlEvent(.valueChanged).asSignal()
         )
         super.init(frame: frame)
-        setupView()
-    }
-    
-    func setupView() {
+        
         collectionView = self.makeCollectionView()
         spinner.isHidden = true
         self.addSubview(spinner)
@@ -36,7 +33,7 @@ final class ArticleView: UIView {
         setupConstraints()
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         // TODO: move magic number to constant file
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor).isActive = true
@@ -72,49 +69,71 @@ final class ArticleView: UIView {
         output.refreshSignal.emit(onNext: ({
             self.refreshControler.endRefreshing()
         })).disposed(by: disposeBag)
+        output.layoutDriver.drive(collectionView.rx.collectionViewLayout).disposed(by: disposeBag)
     }
 }
 
 extension ArticleView {
-    typealias DataSource = RxCollectionViewSectionedReloadDataSource<HeadlineListSectionModel>
+    typealias DataSource = RxCollectionViewSectionedReloadDataSource<MultipleSectionModel>
     
-    func makeCollectionView() -> UICollectionView {
+    private func makeCollectionView() -> UICollectionView {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
-        collectionViewFlowLayout.itemSize = CGSize(width: UIScreen.main.bounds.size.width * 0.95, height: 300)
         let collectionView: UICollectionView = .init(frame: CGRectZero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.refreshControl = refreshControler
         return collectionView
     }
     
-    func makeDataSource() -> DataSource {
-        
+    private func makeDataSource() -> DataSource {
         collectionView.register(ArticleCell.self, forCellWithReuseIdentifier: "articleCell")
-        
+        collectionView.register(SourceCell.self, forCellWithReuseIdentifier: "sourceCell")
+
         return .init(
             configureCell: { dataSource, collectionView, indexPath, item in
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "articleCell", for: indexPath) as! ArticleCell
-                let viewModelOutput = item.transform(input: cell.input)
-                cell.configure(output: viewModelOutput)
-                return cell
+                switch dataSource[indexPath] {
+                case .ArticleListSectionItem(let viewModel):
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "articleCell", for: indexPath) as! ArticleCell
+                    let viewModelOutput = viewModel.transform(input: cell.input)
+                    cell.configure(output: viewModelOutput)
+                    return cell
+                case .SourceListSectionItem(let viewModel):
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sourceCell", for: indexPath) as! SourceCell
+                    let viewModelOutput = viewModel.transform(input: cell.input)
+                    cell.configure(output: viewModelOutput)
+                    return cell
+                }
             }
         )
     }
 }
 
-struct HeadlineListSectionModel {
-    var header: String
-    var items: [Item]
+enum MultipleSectionModel {
+    case ArticleListSectionModel(items: [SectionItem])
+    case SourceListSectionModel(items: [SectionItem])
 }
 
-extension HeadlineListSectionModel: SectionModelType {
-    typealias Item = ArticleCellViewModel
+enum SectionItem {
+    case ArticleListSectionItem(viewModel: ArticleCellViewModel)
+    case SourceListSectionItem(viewModel: SourceCellViewModel)
+}
+
+extension MultipleSectionModel: SectionModelType {
+    typealias Item = SectionItem
     
-    var identity: String {
-        return header
+    var items: [SectionItem] {
+        switch  self {
+        case .ArticleListSectionModel(items: let items):
+            return items.map { $0 }
+        case .SourceListSectionModel(items: let items):
+            return items.map { $0 }
+        }
     }
     
-    init(original: HeadlineListSectionModel, items: [Item]) {
-        self = original
-        self.items = items
+    init(original: MultipleSectionModel, items: [Item]) {
+        switch original {
+        case .ArticleListSectionModel(items: _):
+            self = .ArticleListSectionModel(items: items)
+        case .SourceListSectionModel(items: _):
+            self = .SourceListSectionModel(items: items)
+        }
     }
 }

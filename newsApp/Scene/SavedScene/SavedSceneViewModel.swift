@@ -9,8 +9,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class SavedSceneViewModel: ViewModelType {
-    typealias Section = HeadlineListSectionModel
+final class SavedSceneViewModel: ViewModelType {
+    typealias Section = MultipleSectionModel
     typealias Input = HeadlinesSceneViewModel.Input
     typealias Output = HeadlinesSceneViewModel.Output
     
@@ -39,16 +39,28 @@ class SavedSceneViewModel: ViewModelType {
         
         let dataSourceDriver: Driver<[Section]> = articlesRelay.map {
             articles in
-            let articleViewModels: [ArticleCellViewModel] = articles.map { ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService) }
-            return [Section(header: "Articles", items: articleViewModels)]
+            let articleViewModels: [SectionItem] = articles.map {
+                .ArticleListSectionItem(viewModel: ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService))
+            }
+            return [
+                .ArticleListSectionModel(items: articleViewModels)
+            ]
         }
             .asDriver(onErrorDriveWith: .empty())
+        
+        let layoutDriver: Driver<UICollectionViewLayout> = Driver.just(
+            UICollectionViewFlowLayout()
+        ).map {
+            $0.itemSize = CGSize(width: UIScreen.main.bounds.size.width * 0.95, height: 300)
+            return $0
+        }
         
         return Output(
             isLoadingDriver: .empty(), 
             dateSourceDriver: dataSourceDriver,
             otherSignal: articlesObservable.asSignal(onErrorSignalWith: .empty()),
-            refreshSignal: refreshSignal
+            refreshSignal: refreshSignal,
+            layoutDriver: layoutDriver
         )
     }
 }

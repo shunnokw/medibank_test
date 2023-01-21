@@ -12,10 +12,13 @@ protocol UserDefaultServiceType {
     func removeBookmark(article: Article)
     func getBookmarks() -> [Article]
     func checkIsBookmarked(article: Article) -> Bool
+    func getSelectedSources() -> [Source]
+    func addSelectedSource(source: Source)
+    func removeSelectedSource(source: Source)
 }
 
 class UserDefaultService: UserDefaultServiceType {
-    let userDefaults: UserDefaults
+    private let userDefaults: UserDefaults
     
     init() {
         userDefaults = UserDefaults.standard
@@ -61,5 +64,42 @@ class UserDefaultService: UserDefaultServiceType {
     func checkIsBookmarked(article: Article) -> Bool {
         let articles = getBookmarks()
         return articles.contains(article)
+    }
+    
+    func getSelectedSources() -> [Source] {
+        if let objects = userDefaults.value(forKey: "sources") as? Data {
+            let decoder = JSONDecoder()
+            if let sources = try? decoder.decode(Array.self, from: objects) as [Source] {
+                return sources
+            } else {
+                return []
+            }
+        } else {
+            return []
+        }
+    }
+    
+    func addSelectedSource(source: Source) {
+        var sources = getSelectedSources()
+        sources.append(source)
+        
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(sources){
+            userDefaults.set(encoded, forKey: "sources")
+        }
+    }
+    
+    func removeSelectedSource(source: Source) {
+        var sources = getSelectedSources()
+        if let index = sources.firstIndex(of: source) {
+            sources.remove(at: index)
+        } else {
+            return
+        }
+        
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(sources){
+            userDefaults.set(encoded, forKey: "sources")
+        }
     }
 }

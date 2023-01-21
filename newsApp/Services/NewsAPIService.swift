@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol NewsApiServiceType {
-    func getHeadlines() -> Observable<[Article]>
+    func getHeadlines(sources: [Source]) -> Observable<[Article]>
     func getSources() -> Observable<[Source]>
 }
 
@@ -25,12 +25,16 @@ class NewsAPIService: NewsApiServiceType {
         apiKey = plist.value(forKey: "apiKey") as? String ?? ""
     }
     
-    func getHeadlines() -> Observable<[Article]> {
+    func getHeadlines(sources: [Source]) -> Observable<[Article]> {
+        let sourceNames = sources.filter { $0.id?.isEmpty == false }.map { $0.id ?? "" }
         var urlComponents = URLComponents(string: self.baseUrl + "top-headlines")!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "country", value: "au"),
-            URLQueryItem(name: "apiKey", value: self.apiKey)
-        ]
+        var queryItems = [URLQueryItem(name: "apiKey", value: self.apiKey)]
+        if (sources.count > 0) {
+            queryItems.append(URLQueryItem(name: "sources", value: sourceNames.joined(separator: ",")))
+        } else {
+            queryItems.append(URLQueryItem(name: "country", value: "au"))
+        }
+        urlComponents.queryItems = queryItems
         
         var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = "GET"

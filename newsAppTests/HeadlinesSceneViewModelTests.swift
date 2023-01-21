@@ -78,16 +78,22 @@ extension HeadlinesSceneViewModelTests {
         event: Int,
         row: Int
     ) throws -> ArticleCellViewModel {
-        guard let cellViewModel = dataSourceObserver.events[safe: event]?.value.element?[safe: 0]?.items[safe: row]
+        guard let cellViewModel = dataSourceObserver.events[try: event]?.value.element?[try: 0]?.items[try: row]
         else { throw "Failed to extract view model" }
-        return cellViewModel
+        
+        switch cellViewModel {
+        case .ArticleListSectionItem(let viewModel):
+            return viewModel
+        case .SourceListSectionItem:
+            throw "Extracted wrong view model"
+        }
     }
 }
 
 extension String: Error {}
 
 extension Collection {
-  subscript(safe index: Index) -> Iterator.Element? {
+  subscript(try index: Index) -> Iterator.Element? {
     guard indices.contains(index) else { return nil }
     return self[index]
   }

@@ -7,9 +7,9 @@
 
 import UIKit
 
-class HeadlinesSceneViewController: UIViewController {
+final class HeadlinesSceneViewController: UIViewController {
     
-    let headlinesSceneViewModel: HeadlinesSceneViewModel
+    private let headlinesSceneViewModel: HeadlinesSceneViewModel
 
     init(headlinesSceneViewModel: HeadlinesSceneViewModel) {
         self.headlinesSceneViewModel = headlinesSceneViewModel
