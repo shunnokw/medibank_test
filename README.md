@@ -1,5 +1,6 @@
 # Medibank test news app
 This is the news app for Medibank code test challenge
+This app is fully built with RxSwift
 
 ## Screenshot
 <img src="https://user-images.githubusercontent.com/33548195/213873500-c2219032-da33-4309-a097-6cc2fb43c007.png" width="200" /> <img src="https://user-images.githubusercontent.com/33548195/213873634-22b3cf7a-9609-4947-8c53-9f331471d823.png" width="200" />
