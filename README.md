@@ -16,6 +16,10 @@ You need to add a key.plist file in order to run the app and add `apiKey` as key
 Get your api key from https://newsapi.org
 
 ## Code coverage
+Tests covered all business logic (`viewModel` class).
+
+Services class are not tested because not much logic inside and don't want to test apple's code.
+
 ![CleanShot 2023-01-23 at 01 41 25@2x](https://user-images.githubusercontent.com/33548195/213921725-11537def-69ce-4fec-a637-687d7cd10132.png)
 
 
