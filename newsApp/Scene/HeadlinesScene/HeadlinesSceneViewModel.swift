@@ -50,10 +50,15 @@ final class HeadlinesSceneViewModel: ViewModelType {
             self.articlesRelay.accept($0)
         }
         
-        let dataSourceDriver: Driver<[Section]> = articlesRelay.map {
+        let dataSourceDriver: Driver<[Section]> = articlesRelay.map { [self]
             articles in
             let articleViewModels: [SectionItem] = articles.map {
-                .ArticleListSectionItem(viewModel: ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService))
+                .ArticleListSectionItem(viewModel: ArticleCellViewModel(
+                    article: $0,
+                    navigator: navigator,
+                    userDefaultService: userDefaultService,
+                    newsApiService: newsApiService
+                ))
             }
             return [.ArticleListSectionModel(items: articleViewModels)]
         }

@@ -18,10 +18,16 @@ final class SavedSceneViewModel: ViewModelType {
     private let navigator: HeadlinesSceneNavigator
     private let isLoading: ActivityIndicator
     private let articlesRelay: BehaviorRelay<[Article]>
-
-    init(navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
+    private let newsAPIService: NewsApiServiceType
+    
+    init(
+        navigator: HeadlinesSceneNavigator,
+        userDefaultService: UserDefaultServiceType,
+        newsAPIService: NewsApiServiceType
+    ) {
         self.navigator = navigator
         self.userDefaultService = userDefaultService
+        self.newsAPIService = newsAPIService
         self.isLoading = ActivityIndicator()
         self.articlesRelay = BehaviorRelay(value: [])
     }
@@ -37,10 +43,15 @@ final class SavedSceneViewModel: ViewModelType {
             }
             .asSignal(onErrorSignalWith: .empty())
         
-        let dataSourceDriver: Driver<[Section]> = articlesRelay.map {
+        let dataSourceDriver: Driver<[Section]> = articlesRelay.map { [self]
             articles in
             let articleViewModels: [SectionItem] = articles.map {
-                .ArticleListSectionItem(viewModel: ArticleCellViewModel(article: $0, navigator: self.navigator, userDefaultService: self.userDefaultService))
+                .ArticleListSectionItem(viewModel: ArticleCellViewModel(
+                    article: $0,
+                    navigator: navigator,
+                    userDefaultService: userDefaultService,
+                    newsApiService: newsAPIService
+                ))
             }
             return [
                 .ArticleListSectionModel(items: articleViewModels)

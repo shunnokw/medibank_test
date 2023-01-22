@@ -10,6 +10,22 @@ import RxSwift
 @testable import newsApp
 
 class MockUserDefaultService: UserDefaultServiceType {
+    var stubBookmarks: [Article]!
+    
+    var stubIsBookmarked: Bool = false
+    
+    func getSelectedSources() -> [Source] {
+        return []
+    }
+    
+    func addSelectedSource(source: Source) {
+        
+    }
+    
+    func removeSelectedSource(source: Source) {
+        
+    }
+    
     func addBookmark(article: Article) {
         
     }
@@ -19,12 +35,10 @@ class MockUserDefaultService: UserDefaultServiceType {
     }
     
     func getBookmarks() -> [Article] {
-        return []
+        return stubBookmarks
     }
     
     func checkIsBookmarked(article: Article) -> Bool {
-        return false
+        return stubIsBookmarked
     }
-    
-    
 }

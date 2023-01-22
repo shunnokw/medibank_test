@@ -15,6 +15,9 @@
 		5744FA2629798AA3006918A9 /* MockUserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA2529798AA3006918A9 /* MockUserDefaultService.swift */; };
 		5744FA29297BD04A006918A9 /* SourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA28297BD04A006918A9 /* SourceCell.swift */; };
 		5744FA2B297BD052006918A9 /* SourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA2A297BD052006918A9 /* SourceCellViewModel.swift */; };
+		5744FA2F297C46DC006918A9 /* SavedSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA2E297C46DC006918A9 /* SavedSceneViewModelTests.swift */; };
+		5744FA31297C48D0006918A9 /* SourceSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA30297C48D0006918A9 /* SourceSceneViewModelTests.swift */; };
+		5744FA33297D77AC006918A9 /* WebViewSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744FA32297D77AC006918A9 /* WebViewSceneViewModelTests.swift */; };
 		57C554C72977C32D00EEEEF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C554C62977C32D00EEEEF3 /* AppDelegate.swift */; };
 		57C554C92977C32D00EEEEF3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C554C82977C32D00EEEEF3 /* SceneDelegate.swift */; };
 		57C554D02977C32E00EEEEF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57C554CF2977C32E00EEEEF3 /* Assets.xcassets */; };
@@ -61,6 +64,9 @@
 		5744FA2529798AA3006918A9 /* MockUserDefaultService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaultService.swift; sourceTree = "<group>"; };
 		5744FA28297BD04A006918A9 /* SourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCell.swift; sourceTree = "<group>"; };
 		5744FA2A297BD052006918A9 /* SourceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCellViewModel.swift; sourceTree = "<group>"; };
+		5744FA2E297C46DC006918A9 /* SavedSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSceneViewModelTests.swift; sourceTree = "<group>"; };
+		5744FA30297C48D0006918A9 /* SourceSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceSceneViewModelTests.swift; sourceTree = "<group>"; };
+		5744FA32297D77AC006918A9 /* WebViewSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSceneViewModelTests.swift; sourceTree = "<group>"; };
 		57C554C32977C32D00EEEEF3 /* newsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C554C62977C32D00EEEEF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C554C82977C32D00EEEEF3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -213,9 +219,12 @@
 			isa = PBXGroup;
 			children = (
 				57C554DD2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift */,
+				5744FA2E297C46DC006918A9 /* SavedSceneViewModelTests.swift */,
 				57C5555B2978537600EEEEF3 /* MockNetworkService.swift */,
 				57C5555D29785CF300EEEEF3 /* MockStuff.swift */,
 				5744FA2529798AA3006918A9 /* MockUserDefaultService.swift */,
+				5744FA30297C48D0006918A9 /* SourceSceneViewModelTests.swift */,
+				5744FA32297D77AC006918A9 /* WebViewSceneViewModelTests.swift */,
 			);
 			path = newsAppTests;
 			sourceTree = "<group>";
@@ -506,7 +515,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5744FA2F297C46DC006918A9 /* SavedSceneViewModelTests.swift in Sources */,
+				5744FA33297D77AC006918A9 /* WebViewSceneViewModelTests.swift in Sources */,
 				57C5555C2978537600EEEEF3 /* MockNetworkService.swift in Sources */,
+				5744FA31297C48D0006918A9 /* SourceSceneViewModelTests.swift in Sources */,
 				57C5555E29785CF300EEEEF3 /* MockStuff.swift in Sources */,
 				5744FA2629798AA3006918A9 /* MockUserDefaultService.swift in Sources */,
 				57C554DE2977C32E00EEEEF3 /* HeadlinesSceneViewModelTests.swift in Sources */,
@@ -655,9 +667,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K2R6NQH72;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 5K2R6NQH72;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -670,8 +684,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jw.tftvjkklkl.newsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jw.newsApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = newAppProv;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -687,9 +703,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K2R6NQH72;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 5K2R6NQH72;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -702,8 +720,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jw.tftvjkklkl.newsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jw.newsApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = newAppProv;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

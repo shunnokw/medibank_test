@@ -10,6 +10,8 @@ import RxCocoa
 import RxSwift
 
 final class ArticleCellViewModel: ViewModelType {
+    typealias NavigationEvent = HeadlinesSceneNavigator.Event
+    
     struct Input {
         let clickOnCardSignal: Signal<Void>
     }
@@ -18,17 +20,24 @@ final class ArticleCellViewModel: ViewModelType {
         let titleTextDriver: Driver<NSAttributedString>
         let thumbnailUIImageDriver: Driver<UIImage?>
         let authorTextDriver: Driver<NSAttributedString>
-        let otherSignal: Signal<Void>
+        let otherSignal: Signal<NavigationEvent>
     }
     
     private let article: Article
     private let navigator: HeadlinesSceneNavigatorType
     private let userDefaultService: UserDefaultServiceType
+    private let newsApiService: NewsApiServiceType
     
-    init(article: Article, navigator: HeadlinesSceneNavigator, userDefaultService: UserDefaultServiceType) {
+    init(
+        article: Article,
+        navigator: HeadlinesSceneNavigator,
+        userDefaultService: UserDefaultServiceType,
+        newsApiService: NewsApiServiceType
+    ) {
         self.article = article
         self.navigator = navigator
         self.userDefaultService = userDefaultService
+        self.newsApiService = newsApiService
     }
     
     func transform(input: Input) -> Output {
@@ -36,7 +45,7 @@ final class ArticleCellViewModel: ViewModelType {
         let urlString = article.urlToImage ?? ""
         let imageUrl = URL(string: urlString)
         
-        let thumbnailImageUrlDriver = downloadImage(url: imageUrl).asDriver(onErrorDriveWith: .empty())
+        let thumbnailImageUrlDriver = newsApiService.downloadImage(url: imageUrl).asDriver(onErrorDriveWith: .empty())
         
         let titleTextDriver: Driver<NSAttributedString> = Driver.of(article.title ?? "").map {
             let font = UIFont.systemFont(ofSize: 14)
@@ -50,9 +59,11 @@ final class ArticleCellViewModel: ViewModelType {
             return NSAttributedString(string: $0, attributes: attributes)
         }
         
-        let otherSignal = input.clickOnCardSignal.do(onNext: {
-            self.navigator.eventOccurred(with: .toWebViewScene(self.article, self.userDefaultService))
-        })
+        let otherSignal: Signal<NavigationEvent> = input.clickOnCardSignal.map { [self] in
+            let event: NavigationEvent = .toWebViewScene(article: article, userDefaultServiceType: userDefaultService)
+            self.navigator.eventOccurred(with: event)
+            return event
+        }
         
         return Output(
             titleTextDriver: titleTextDriver,
@@ -60,17 +71,5 @@ final class ArticleCellViewModel: ViewModelType {
             authorTextDriver: authorTextDriver,
             otherSignal: otherSignal
         )
-    }
-}
-
-extension ArticleCellViewModel {
-    // TODO: Image caching
-    // Image loading effect for better UX?
-    func downloadImage(url: URL?) -> Observable<UIImage?> {
-        guard let url = url else { return Observable.of(nil) }
-        return URLSession.shared.rx
-            .data(request: URLRequest(url: url))
-            .map { data in UIImage(data: data) }
-            .catchAndReturn(nil)
     }
 }

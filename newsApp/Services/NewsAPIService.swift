@@ -11,6 +11,7 @@ import RxSwift
 protocol NewsApiServiceType {
     func getHeadlines(sources: [Source]) -> Observable<[Article]>
     func getSources() -> Observable<[Source]>
+    func downloadImage(url: URL?) -> Observable<UIImage?>
 }
 
 class NewsAPIService: NewsApiServiceType {
@@ -61,5 +62,13 @@ class NewsAPIService: NewsApiServiceType {
             .data(request: request)
             .map { data in try JSONDecoder().decode(NewsResponse.self, from: data).sources! }
             .catchAndReturn([])
+    }
+    
+    func downloadImage(url: URL?) -> Observable<UIImage?> {
+        guard let url = url else { return Observable.of(nil) }
+        return URLSession.shared.rx
+            .data(request: URLRequest(url: url))
+            .map { data in UIImage(data: data) }
+            .catchAndReturn(nil)
     }
 }

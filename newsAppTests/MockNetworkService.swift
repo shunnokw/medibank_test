@@ -11,14 +11,20 @@ import RxSwift
 
 class MockNewsApiService: NewsApiServiceType {
     var stubHeadlineArticlesObservable: Observable<[Article]>!
-
+    
     var stubSourceObservable: Observable<[Source]>!
-
-    func getHeadlines() -> Observable<[Article]> {
+    
+    var stubImage: Observable<UIImage?>!
+    
+    func getHeadlines(sources: [Source]) -> Observable<[Article]> {
         return stubHeadlineArticlesObservable
     }
     
-    func getSources() -> RxSwift.Observable<[newsApp.Source]> {
+    func getSources() -> Observable<[Source]> {
         return stubSourceObservable
+    }
+    
+    func downloadImage(url: URL?) -> Observable<UIImage?> {
+        return stubImage
     }
 }

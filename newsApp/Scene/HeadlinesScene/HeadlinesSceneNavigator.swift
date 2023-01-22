@@ -8,15 +8,22 @@
 import Foundation
 import UIKit
 
-enum Event {
-    case toWebViewScene(Article, UserDefaultServiceType)
-}
-
 protocol HeadlinesSceneNavigatorType {
-    func eventOccurred(with type: Event)
+    func eventOccurred(with type: HeadlinesSceneNavigator.Event)
 }
 
 final class HeadlinesSceneNavigator: HeadlinesSceneNavigatorType {
+    
+    enum Event: Equatable {
+        case toWebViewScene(article: Article, userDefaultServiceType: UserDefaultServiceType)
+        
+        static func == (lhs: HeadlinesSceneNavigator.Event, rhs: HeadlinesSceneNavigator.Event) -> Bool {
+            switch (lhs, rhs) {
+            case (toWebViewScene, toWebViewScene):
+                return true
+            }
+        }
+    }
     
     private let navigator: UINavigationController
     

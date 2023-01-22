@@ -42,14 +42,14 @@ final class WebViewSceneViewModel: ViewModelType {
             return url
         }
         
-        let otherSignal = input.bookmarkBtnTapEvent.map {
+        let otherSignal = input.bookmarkBtnTapEvent.map { [self]
             _ in
-            if self.isBookmarkRelay.value {
-                self.userDefaultService.removeBookmark(article: self.article)
+            if isBookmarkRelay.value {
+                userDefaultService.removeBookmark(article: article)
             } else {
-                self.userDefaultService.addBookmark(article: self.article)
+                userDefaultService.addBookmark(article: article)
             }
-            self.isBookmarkRelay.accept(self.userDefaultService.checkIsBookmarked(article: self.article))
+            isBookmarkRelay.accept(!isBookmarkRelay.value)
         }
         
         return Output(

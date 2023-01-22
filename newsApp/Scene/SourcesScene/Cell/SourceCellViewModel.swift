@@ -16,7 +16,6 @@ final class SourceCellViewModel: ViewModelType {
     
     struct Output {
         let nameTextDriver: Driver<NSAttributedString>
-        let descriptionTextDriver: Driver<NSAttributedString>
         let isSelectedDriver: Driver<Bool>
         let otherSignal: Signal<Void>
     }
@@ -49,15 +48,8 @@ final class SourceCellViewModel: ViewModelType {
             return NSAttributedString(string: $0, attributes: attributes)
         }
         
-        let descriptionTextDriver: Driver<NSAttributedString> = Driver.of(source.description ?? "").map {
-            let font = UIFont.systemFont(ofSize: 12)
-            let attributes = [NSAttributedString.Key.font: font]
-            return NSAttributedString(string: $0, attributes: attributes)
-        }
-        
         return Output(
             nameTextDriver: nameTextDriver,
-            descriptionTextDriver: descriptionTextDriver,
             isSelectedDriver: isSelectedRelay.asDriver(),
             otherSignal: otherSignal
         )
