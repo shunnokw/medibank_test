@@ -16,5 +16,11 @@ You need to add a key.plist file in order to run the app and add `apiKey` as key
 Get your api key from https://newsapi.org
 
 ## Code coverage
+![CleanShot 2023-01-23 at 01 41 25@2x](https://user-images.githubusercontent.com/33548195/213921725-11537def-69ce-4fec-a637-687d7cd10132.png)
+
 
 ## Future improvement
+1. use `Swinject` to do dependency injection to avoid passing dependency everywhere.
+2. use `Yogakit` or some other UI framwork to avoid using tidious autolayout code.
+3. use `moya` to make api call easier and more testable.
+4. include some generic type for `NewsResponse` object.
