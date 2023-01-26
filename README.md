@@ -1,5 +1,5 @@
-# Medibank test news app
-This is the news app for Medibank code test challenge.
+# News app
+This is the news app for code test challenge.
 
 This app is fully built with RxSwift + MVVM.
 
